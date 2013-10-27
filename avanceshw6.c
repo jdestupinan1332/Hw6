@@ -13,10 +13,10 @@ int main(int argc, char **argv){
 		printf("We need at least 4 argument beside the name of the executable!\n EXIT!\n");
 		exit(1);  
 	}
-	float a= atoi(argv[2]);
-	float b= atoi(argv[3]);
-	float c= atoi(argv[4]);
-	float d= atoi(argv[5]);
+	float a= atoi(argv[1]);
+	float b= atoi(argv[2]);
+	float c= atoi(argv[3]);
+	float d= atoi(argv[4]);
 	
 	
 	FILE *in;
