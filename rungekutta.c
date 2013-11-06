@@ -9,56 +9,51 @@ float * rungekutta(float x0, float y0,float vx0, float vy0);
 
 
 int main(){
-	
-	
-	evolve("p.dat","data2.dat");
-	
-	
-	
+  evolve("p.dat","data2.dat");
 }
 
 
 
 float * rungekutta(float x0, float y0,float vx0, float vy0){
 	
-	int i;
-	int dt=10000;
-	int t;
-	int n=100000;// numero de iteraciones
-	float xn=x0;
-	float yn=y0;
-	float vxn=vx0;
-	float vyn=vy0;
-	float *salida;
+  int i;
+  int dt=10000;
+  int t;
+  int n=100000;// numero de iteraciones
+  float xn=x0;
+  float yn=y0;
+  float vxn=vx0;
+  float vyn=vy0;
+  float *salida;
 	
-	if(!(salida=malloc(5 *sizeof(double)))){
-		fprintf(stderr,"Problem with allocation");
-		exit (1);
-	}
-	
-	printf("%f,%f,%f,%f\n",xn,yn,vxn,vyn);
-	for (i=0; i<n;i++){
+  if(!(salida=malloc(5 *sizeof(double)))){
+    fprintf(stderr,"Problem with allocation");
+    exit (1);
+  }
+  
+  printf("%f,%f,%f,%f\n",x0,y0,vx0,vy0);
+  for (i=0; i<n;i++){
+    
+    t=i*dt;
+    float x=xn;
+    float y=yn;
+    float vx=vxn;
+    float vy=vyn;
 		
-		t=i*dt;
-		float x=xn;
-		float y=yn;
-		float vx=vxn;
-		float vy=vyn;
-		
-		//radio velocidad aceleracion
-		float r=sqrt(pow(x,2)+pow(y,2));
-		float v=sqrt(pow(vx,2)+pow(vy,2));
-		float a=aceleracion(x,y,vx,vy);
-		//angulo
-		float teta = atan2(y,x); //arctan(y/x)
-		//coordenadas aceleracion
-		float ax= a*cos(teta);
-		float ay= a*sin(teta);
+    //radio velocidad aceleracion
+    float r=sqrt(pow(x,2)+pow(y,2));
+    float v=sqrt(pow(vx,2)+pow(vy,2));
+    float a=aceleracion(x,y,vx,vy);
+    //angulo
+    float teta = atan2(y,x); //arctan(y/x)
+    //coordenadas aceleracion
+    float ax= a*cos(teta);
+    float ay= a*sin(teta);
 	
-		//PRIMER PASO
-	
-		float k1x = vx*dt;
-		float k1y = vy*dt;
+    //PRIMER PASO
+    
+    float k1x = vx*dt;
+    float k1y = vy*dt;
 		float l1x = ax*dt;
 		float l1y = ay*dt;
 	
@@ -166,11 +161,15 @@ float aceleracion(float x,float y,float vx,float vy){
 void evolve (char condini[25], char condfin[25]){
   FILE *ini;
   FILE *fin;
-  float posx, posy, velx, vely;
-  int id;
+  float posx=0.0;
+  float posy=0.0;
+  float velx=0.0;
+  float vely=0.0;
+  int id = 0;
   float *M;
   float *var;
   int i, lmax, l, n;
+  int test;
  
   /*Opens file*/
   ini = fopen(condini, "r");
@@ -179,30 +178,33 @@ void evolve (char condini[25], char condfin[25]){
     exit(1);
   }
   
+  lmax = 0;
   /*Count lines*/
   do{
     i = fgetc(ini);
     if (i == '\n') lmax++;
   }while (i != EOF);
+  fclose(ini);
 
   /*memory allocation*/
   if (!(M = malloc(5 * lmax*  sizeof(double)))){
     fprintf(stderr, "Problem with memory allocation\n");
     exit(1);
   }
-  
+
+  ini = fopen(condini, "r");
   n = 0;
   for (l=0;l<lmax;l++){
     n = 5*l;
-    fscanf(ini, "%d %f %f %e %e\n", &id, &posx, &posy, &velx, &vely);
+    test = fscanf(ini, "%d %f %f %e %e\n", &id, &posx, &posy, &velx, &vely);
     M[n] = id;
     M[n+1] = posx;
     M[n+2] = posy;
     M[n+3] = velx;
-    M[n+4] = vely;   
+    M[n+4] = vely;
   }
   fclose(ini);
-
+  
   /*buscar centros de galaxias*/
   
   /*RungeKutta*/
