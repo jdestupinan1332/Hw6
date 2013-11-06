@@ -45,7 +45,7 @@ void ini_pos(int n,float r,float x0,float y0,float vx0,float vy0, int ni){
 	float vy[n];
 	int ID[n];
 	int i=0;
-	float G=4.89*pow(10,(-39));
+	float G=4.864*pow(10,(-6)); //kPc^3 M^-1 yr ^-2
 	float M=pow(10,12);
 
 	srand48(time(NULL));
