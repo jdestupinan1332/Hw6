@@ -1,10 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include <time.h>
 
 float aceleracion(float x,float y,float vx,float vy);
-void evolve(char condini, char condfinal);
+void evolve(char condini[25], char condfinal[25]);
 float *rungekutta(float x0, float y0,float vx0, float vy0);
 
 
@@ -196,6 +195,64 @@ float aceleracion(float x,float y,float vx,float vy){
 	float a=-(G*M/pow(r,2));
 	
 	return a;
+}
+
+void evolve (char condini[25], char condfin[25]){
+  FILE *ini;
+  FILE *fin;
+  float posx, posy, velx, vely;
+  int id;
+  float *M;
+  float var[4];
+  int i, lmax, l, n;
+ 
+  /*Opens file*/
+  ini = fopen(condini, "r");
+  if(!ini){
+    printf("problems opening the file %s\n",condini);
+    exit(1);
+  }
+  
+  /*Count lines*/
+  do{
+    i = fgetc(ini);
+    if (i == '\n') lmax++;
+  }while (i != EOF);
+
+  /*memory allocation*/
+  if (!(M = malloc(5 * lmax*  sizeof(double)))){
+    fprintf(stderr, "Problem with memory allocation\n");
+    exit(1);
+  }
+  
+  n = 0;
+  for (l=0;l<lmax;l++){
+    n = 5*l;
+    fscanf(ini, "%d %f %f %e %e\n", &id, &posx, &posy, &velx, &vely);
+    M[n] = id;
+    M[n+1] = posx;
+    M[n+2] = posy;
+    M[n+3] = velx;
+    M[n+4] = vely;   
+  }
+  fclose(ini);
+
+  /*buscar centros de galaxias*/
+  
+  /*RungeKutta*/
+  n = 0;
+  fin = fopen(condfin, "a");
+  if(!fin){
+    printf("problems opening the file %s\n",condfin);
+    exit(1);
+  }  
+  
+  for (l=0;l<lmax;l++){
+    n = 5*l;
+    var = rungekutta(M[n+1],M[n+2],M[n+3],M[n+4]);
+    fprintf(fin, "%d %f %f %e %e\n",l-1, var[0], var[1],var[2], var[3]);
+  }
+  fclose(fin);
 }
 
 
