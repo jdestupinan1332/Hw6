@@ -198,3 +198,4 @@ float aceleracion(float x,float y,float vx,float vy){
 	return a;
 }
 
+
