@@ -4,65 +4,21 @@
 
 float aceleracion(float x,float y,float vx,float vy);
 void evolve(char condini[25], char condfinal[25]);
-float *rungekutta(float x0, float y0,float vx0, float vy0);
+float * rungekutta(float x0, float y0,float vx0, float vy0);
 
 
 
-int main(int argc, char **argv){
-	
-	if(argc<2){
-		printf("We need at least 1 argument beside the name of the executable!\n EXIT!\n");
-		exit(1);
-	}
-	//archivos de las galaxias
-	
-	FILE *galaxia1;
-	FILE *galaxia2;
-	FILE *galaxias;
-	
-	//archivos de las posiciones a los aos requeridos
-		
-	FILE *aos1000;
-	FILE *aos2000;
-	FILE *aos3000;
-	FILE *aos4000;
-	FILE *aos5000;
-	
-	//variables
-	int n=500000;//numero de puntos en tiempo
-	int dt=10000;//pasos en el tiempo
-	int masas =120;//numero de cuerpos que conforman la galaxia.		
-	int t;//tiempo
-	//Iteraciones
-	
-	int i;//iteracion en cuerpos
-	int j;//iteracion en tiempo
+int main(){
 	
 	
-	//en coordenadas
-	float x;
-	float y;
-	float vx;
-	float vy;
-	float ax;
-	float ay;
-	
-	
-	
-	//si es una sola galaxia.
-	if (argc==2){
-		
-		galaxia1=fopen(argv[1],"w");
-	}
-		
-		
+	evolve("data.dat","data2.dat");
 	
 	
 }
 
 
 
-float[] rungekutta(float x0, float y0,float vx0, float vy0){
+float * rungekutta(float x0, float y0,float vx0, float vy0){
 	
 	int i;
 	int dt=10000;
@@ -72,7 +28,12 @@ float[] rungekutta(float x0, float y0,float vx0, float vy0){
 	float yn=y0;
 	float vxn=vx0;
 	float vyn=vy0;
-	float salida[4];
+	float *salida;
+	
+	if(!(salida=malloc(5 *sizeof(double)))){
+		fprintf(stderr,"Problem with allocation");
+		exit (1);
+	}
 	
 	
 	for (i=0; i<n;i++){
@@ -203,7 +164,7 @@ void evolve (char condini[25], char condfin[25]){
   float posx, posy, velx, vely;
   int id;
   float *M;
-  float var[4];
+  float *var;
   int i, lmax, l, n;
  
   /*Opens file*/
