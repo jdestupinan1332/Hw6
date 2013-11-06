@@ -11,7 +11,8 @@ float * rungekutta(float x0, float y0,float vx0, float vy0);
 int main(){
 	
 	
-	evolve("data.dat","data2.dat");
+	evolve("p.dat","data2.dat");
+	
 	
 	
 }
@@ -35,7 +36,7 @@ float * rungekutta(float x0, float y0,float vx0, float vy0){
 		exit (1);
 	}
 	
-	
+	printf("%f,%f,%f,%f\n",xn,yn,vxn,vyn);
 	for (i=0; i<n;i++){
 		
 		t=i*dt;
@@ -63,63 +64,63 @@ float * rungekutta(float x0, float y0,float vx0, float vy0){
 	
 		//SEGUNDO PASO
 		
-		float x1 = x+ 0.5 * k1x;
-		float y1 = y+ 0.5 * k1y;
-		float teta1= atan2(y1,x1);
+		x = x+ 0.5 * k1x;
+		y = y+ 0.5 * k1y;
+		teta= atan2(y,x);
 				
-		float vx1= vx + 0.5* l1x;
-		float vy1= vy + 0.5 *l1y;
+		vx= vx + 0.5* l1x;
+		vy= vy + 0.5 *l1y;
 				
-		float a1=aceleracion(x1,y1,vx1,vy1);
+		a=aceleracion(x,y,vx,vy);
 	
-		float ax1=a1*cos(teta1);
-		float ay1= a1*sin(teta1);
+		ax=a*cos(teta);
+		ay= a*sin(teta);
 	
 	
-		float k2x= vx1*dt;
-		float k2y= vy1*dt;
-		float l2x= ax1*dt;
-		float l2y= ay1*dt;
+		float k2x= vx*dt;
+		float k2y= vy*dt;
+		float l2x= ax*dt;
+		float l2y= ay*dt;
 	
 		//TERCER PASO
 	
-		float x2 = x+ 0.5 * k2x;
-		float y2 = y+ 0.5 * k2y;
-		float teta2= atan2(y1,x1);
+		x = x+ 0.5 * k2x;
+		y = y+ 0.5 * k2y;
+		teta= atan2(y,x);
 				
-		float vx2= vx + 0.5* l2x;
-		float vy2= vy + 0.5 *l2y;
+		vx= vx + 0.5* l2x;
+		vy= vy + 0.5 *l2y;
 				
-		float a2=aceleracion(x2,y2,vx2,vy2);
+		a=aceleracion(x,y,vx,vy);
 	
-		float ax2= a2*cos(teta2);
-		float ay2= a2*sin(teta2);
+		ax= a*cos(teta);
+		ay= a*sin(teta);
 	
 	
-		float k3x= vx2*dt;
-		float k3y= vy2*dt;
-		float l3x= ax2*dt;
-		float l3y= ay2*dt;
+		float k3x= vx*dt;
+		float k3y= vy*dt;
+		float l3x= ax*dt;
+		float l3y= ay*dt;
 	
 		//CUARTO PASO
 	
-		float x3 = x+ k3x;
-		float y3 = y+ k3y;
-		float teta3= atan2(y3,x3);
+		x = x+ k3x;
+		y = y+ k3y;
+		teta= atan2(y,x);
 				
-		float vx3= vx + l3x;
-		float vy3= vy + l3y;
+		vx= vx + l3x;
+		vy= vy + l3y;
 				
-		float a3=aceleracion(x3,y3,vx3,vy3);
+		a=aceleracion(x,y,vx,vy);
 	
-		float ax3= a3*cos(teta3);
-		float ay3= a3*sin(teta3);
+		ax= a*cos(teta);
+		ay= a*sin(teta);
 	
 	
-		float k4x= vx3*dt;
-		float k4y= vy3*dt;
-		float l4x= ax3*dt;
-		float l4y= ay3*dt;
+		float k4x= vx*dt;
+		float k4y= vy*dt;
+		float l4x= ax*dt;
+		float l4y= ay*dt;
 	
 		//FINAL
 			
@@ -132,10 +133,12 @@ float * rungekutta(float x0, float y0,float vx0, float vy0){
 		
 		//Reasignacion
 		
-		xn=x+kx;
-		yn=y+ky;
-		vxn=vx+lx;
-		vyn=vy+ly;
+		xn=xn+kx;
+		yn=yn+ky;
+		vxn=vxn+lx;
+		vyn=vyn+ly;
+		
+		
 		
 	}
 	
@@ -143,6 +146,8 @@ float * rungekutta(float x0, float y0,float vx0, float vy0){
 	salida[1]=yn;
 	salida[2]=vxn;
 	salida[3]=vyn;
+	
+	printf("%f,%f,%f,%f\n",xn,yn,vxn,vyn);
 	
 	return salida;
 }
