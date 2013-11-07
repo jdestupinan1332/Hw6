@@ -45,7 +45,7 @@ float * rungekutta(float x0, float y0,float vx0, float vy0){
 		
 		float x=xn;
 		float y=yn;
-		float vx=vxn;
+		float vx=vxn; 
 		float vy=vyn;
 		
 		//radio velocidad aceleracion
@@ -167,7 +167,7 @@ float aceleracion(float x,float y,float vx,float vy){
 	float G=4.86*pow(10,(-24));
 	float M=pow(10,12);
 	float r=sqrt(pow(x,2)+pow(y,2));
-	float a=-(G*M/pow(r,2));
+	float a=(G*M/pow(r,2));
 	
 	return a;
 }

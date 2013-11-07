@@ -56,7 +56,7 @@ void ini_pos(int n,float r,float x0,float y0,float vx0,float vy0, int ni){
 	for (i=0; i<n; i++){
 		ID[i]=i+ni;
 		
-		x[i]=r*drand48();	
+		x[i]=r*drand48()+x0;	
 		y[i]=sqrt(pow(r,2)-pow(x[i],2));
 		
 		
