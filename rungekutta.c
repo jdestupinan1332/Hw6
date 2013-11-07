@@ -27,7 +27,7 @@ float * rungekutta(float x0, float y0,float vx0, float vy0){
 	
 	int i;
 	int dt=100;
-	int n=1000;// numero de iteraciones
+	int n=100000;// numero de iteraciones
 	float xn=x0;
 	float yn=y0;
 	float vxn=vx0;
