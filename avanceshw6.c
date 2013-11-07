@@ -18,7 +18,7 @@ int main(int argc, char **argv){
 	
 	
 	FILE *in;
-	in=fopen("data1.dat","w");
+	in=fopen("data1.dat","a");
 	fprintf(in, "%d %f %f %e %e\n",-1, a,b,c,d);
 	fclose(in);
 	
