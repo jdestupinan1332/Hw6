@@ -16,55 +16,59 @@ int main(){
 
 float * rungekutta(float x0, float y0,float vx0, float vy0){
 	
-  int i;
-  int dt=10000;
-  int t;
-  int n=100000;// numero de iteraciones
-  float xn=x0;
-  float yn=y0;
-  float vxn=vx0;
-  float vyn=vy0;
-  float *salida;
+  float * salida;
+		
 	
   if(!(salida=malloc(5 *sizeof(double)))){
     fprintf(stderr,"Problem with allocation");
     exit (1);
   }
   
-  printf("%f,%f,%f,%f\n",x0,y0,vx0,vy0);
-  for (i=0; i<n;i++){
-    
-    t=i*dt;
-    float x=xn;
-    float y=yn;
-    float vx=vxn;
-    float vy=vyn;
-		
-    //radio velocidad aceleracion
-    float r=sqrt(pow(x,2)+pow(y,2));
-    float v=sqrt(pow(vx,2)+pow(vy,2));
-    float a=aceleracion(x,y,vx,vy);
-    //angulo
-    float teta = atan2(y,x); //arctan(y/x)
-    //coordenadas aceleracion
-    float ax= a*cos(teta);
-    float ay= a*sin(teta);
 	
-    //PRIMER PASO
-    
-    float k1x = vx*dt;
-    float k1y = vy*dt;
+	int i;
+	int dt=100;
+	int n=1000;// numero de iteraciones
+	float xn=x0;
+	float yn=y0;
+	float vxn=vx0;
+	float vyn=vy0;
+	
+	printf("%f,%f,%f,%f\n",xn,yn,vxn,vyn);
+	
+	
+	for (i=0;i<n;i++){
+		
+		
+		float x=xn;
+		float y=yn;
+		float vx=vxn;
+		float vy=vyn;
+		
+		//radio velocidad aceleracion
+		float r=sqrt(pow(x,2)+pow(y,2));
+		float v=sqrt(pow(vx,2)+pow(vy,2));
+		float a=aceleracion(x,y,vx,vy);
+		//angulo
+		float teta = atan2(y,x); //arctan(y/x)
+		//coordenadas aceleracion
+		float ax= a*cos(teta);
+		float ay= a*sin(teta);
+	
+		//PRIMER PASO
+	
+		float k1x = vx*dt;
+		float k1y = vy*dt;
 		float l1x = ax*dt;
 		float l1y = ay*dt;
 	
 		//SEGUNDO PASO
 		
-		x = x+ 0.5 * k1x;
-		y = y+ 0.5 * k1y;
+		x = xn+ 0.5 * k1x;
+		y = yn+ 0.5 * k1y;
 		teta= atan2(y,x);
 				
-		vx= vx + 0.5* l1x;
-		vy= vy + 0.5 *l1y;
+		vx= vxn + 0.5* l1x;
+		vy= vyn + 0.5 *l1y;
 				
 		a=aceleracion(x,y,vx,vy);
 	
@@ -79,12 +83,12 @@ float * rungekutta(float x0, float y0,float vx0, float vy0){
 	
 		//TERCER PASO
 	
-		x = x+ 0.5 * k2x;
-		y = y+ 0.5 * k2y;
+		x = xn+ 0.5 * k2x;
+		y = yn+ 0.5 * k2y;
 		teta= atan2(y,x);
 				
-		vx= vx + 0.5* l2x;
-		vy= vy + 0.5 *l2y;
+		vx= vxn + 0.5* l2x;
+		vy= vyn + 0.5 *l2y;
 				
 		a=aceleracion(x,y,vx,vy);
 	
@@ -99,12 +103,12 @@ float * rungekutta(float x0, float y0,float vx0, float vy0){
 	
 		//CUARTO PASO
 	
-		x = x+ k3x;
-		y = y+ k3y;
+		x = xn+ k3x;
+		y = yn+ k3y;
 		teta= atan2(y,x);
 				
-		vx= vx + l3x;
-		vy= vy + l3y;
+		vx= vxn + l3x;
+		vy= vyn + l3y;
 				
 		a=aceleracion(x,y,vx,vy);
 	
@@ -133,9 +137,16 @@ float * rungekutta(float x0, float y0,float vx0, float vy0){
 		vxn=vxn+lx;
 		vyn=vyn+ly;
 		
-		
-		
+		printf("%e %e\n",vxn,vyn);
 	}
+    
+    
+    
+    
+    
+    
+		
+	
 	
 	salida[0]=xn;
 	salida[1]=yn;
@@ -150,7 +161,7 @@ float * rungekutta(float x0, float y0,float vx0, float vy0){
 
 float aceleracion(float x,float y,float vx,float vy){
 	
-	float G=4.89*pow(10,(-39));
+	float G=4.86*pow(10,(-24));
 	float M=pow(10,12);
 	float r=sqrt(pow(x,2)+pow(y,2));
 	float a=-(G*M/pow(r,2));
