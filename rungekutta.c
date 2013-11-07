@@ -9,7 +9,7 @@ float * rungekutta(float x0, float y0,float vx0, float vy0);
 
 
 int main(){
-  evolve("p.dat","data2.dat");
+  evolve("data.dat","data2.dat");
 }
 
 
