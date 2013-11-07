@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <math.h>
 
-float aceleracion(float x,float y,float vx,float vy);
+float aceleracion1(double id,float x,float y,float vx,float vy);
 void evolve(char condini[25], char condfinal[25]);
-float * rungekutta(float x0, float y0,float vx0, float vy0);
+float * rungekutta(double id,float x0, float y0,float vx0, float vy0);
 
 
 
@@ -18,7 +18,7 @@ int main(){
 
 
 
-float * rungekutta(float x0, float y0,float vx0, float vy0){
+float * rungekutta(double id,float x0, float y0,float vx0, float vy0){
 	
   float * salida;
 		
@@ -48,10 +48,11 @@ float * rungekutta(float x0, float y0,float vx0, float vy0){
 		float vx=vxn; 
 		float vy=vyn;
 		
+		
 		//radio velocidad aceleracion
 		float r=sqrt(pow(x,2)+pow(y,2));
 		float v=sqrt(pow(vx,2)+pow(vy,2));
-		float a=aceleracion(x,y,vx,vy);
+		float a=aceleracion1(id,x,y,vx,vy);
 		//angulo
 		float teta = atan2(y,x); //arctan(y/x)
 		//coordenadas aceleracion
@@ -74,7 +75,7 @@ float * rungekutta(float x0, float y0,float vx0, float vy0){
 		vx= vxn + 0.5* l1x;
 		vy= vyn + 0.5 *l1y;
 				
-		a=aceleracion(x,y,vx,vy);
+		a=aceleracion1(id,x,y,vx,vy);
 	
 		ax=a*cos(teta);
 		ay= a*sin(teta);
@@ -94,7 +95,7 @@ float * rungekutta(float x0, float y0,float vx0, float vy0){
 		vx= vxn + 0.5* l2x;
 		vy= vyn + 0.5 *l2y;
 				
-		a=aceleracion(x,y,vx,vy);
+		a=aceleracion1(id,x,y,vx,vy);
 	
 		ax= a*cos(teta);
 		ay= a*sin(teta);
@@ -114,7 +115,7 @@ float * rungekutta(float x0, float y0,float vx0, float vy0){
 		vx= vxn + l3x;
 		vy= vyn + l3y;
 				
-		a=aceleracion(x,y,vx,vy);
+		a=aceleracion1(id,x,y,vx,vy);
 	
 		ax= a*cos(teta);
 		ay= a*sin(teta);
@@ -162,16 +163,49 @@ float * rungekutta(float x0, float y0,float vx0, float vy0){
 }
 
 
-float aceleracion(float x,float y,float vx,float vy){
+float aceleracion1(double id,float x,float y,float vx,float vy){//dist es la distancia entre los centros
 	
 	float G=4.86*pow(10,(-24));
 	float M=pow(10,12);
 	float r=sqrt(pow(x,2)+pow(y,2));
-	float a=(G*M/pow(r,2));
+	float a;
 	
+	//Si es una particula cualquiera
+	if ( id>0 ){
+		a=-(G*M/pow(r,2));
+	}
+	//Si es el centro  
+	else if( id<0 ){
+		a=0;
+	}
+		
 	return a;
 }
+float aceleracion2(double id,float x,float y,float vx,float vy ,float distx ,float disty){
+	float G=4.86*pow(10,(-24));
+	float M=pow(10,12);
+	float r=sqrt(pow(x,2)+pow(y,2));
+	float a;
+	
+	
+	if(id>0){
+		
+		float x2= x+ distx;
+		float y2= y+ disty;
+		float r2=sqrt(pow(x2,2)+pow(y2,2));//distancia al centro 2
+		
+		a=-G*M*((1/pow(r,2))+(1/pow(r2,2)));
+		
+	}
+	else if(id<0){
+		
+		float distc=sqrt(pow(distx,2)+pow(disty,2));
+		
+		a=-G*M*(1/pow(distc,2));
+	}
 
+
+}
 void evolve (char condini[25], char condfin[25]){
   FILE *ini;
   FILE *fin;
@@ -231,7 +265,7 @@ void evolve (char condini[25], char condfin[25]){
   
   for (l=0;l<lmax;l++){
     n = 5*l;
-    var = rungekutta(M[n+1],M[n+2],M[n+3],M[n+4]);
+    var = rungekutta(M[n],M[n+1],M[n+2],M[n+3],M[n+4]);
     fprintf(fin, "%d %f %f %e %e\n",l-1, var[0], var[1],var[2], var[3]);
   }
   fclose(fin);
