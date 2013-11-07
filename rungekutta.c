@@ -10,6 +10,10 @@ float * rungekutta(float x0, float y0,float vx0, float vy0);
 
 int main(){
   evolve("data.dat","data2.dat");
+  evolve("data2.dat","data3.dat");
+  evolve("data3.dat","data4.dat");
+  evolve("data4.dat","data5.dat");
+  evolve("data5.dat","data6.dat");
 }
 
 
@@ -33,7 +37,7 @@ float * rungekutta(float x0, float y0,float vx0, float vy0){
 	float vxn=vx0;
 	float vyn=vy0;
 	
-	printf("%f,%f,%f,%f\n",xn,yn,vxn,vyn);
+	
 	
 	
 	for (i=0;i<n;i++){
@@ -137,7 +141,6 @@ float * rungekutta(float x0, float y0,float vx0, float vy0){
 		vxn=vxn+lx;
 		vyn=vyn+ly;
 		
-		printf("%e %e\n",vxn,vyn);
 	}
     
     
@@ -153,7 +156,7 @@ float * rungekutta(float x0, float y0,float vx0, float vy0){
 	salida[2]=vxn;
 	salida[3]=vyn;
 	
-	printf("%f,%f,%f,%f\n",xn,yn,vxn,vyn);
+	
 	
 	return salida;
 }
