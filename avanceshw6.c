@@ -5,8 +5,6 @@
 
 void ini_pos(int n,float r,float x0,float y0,float vx0,float vy0, int ni);
 
-
-
 int main(int argc, char **argv){
 	
 	if(argc<5){
@@ -45,7 +43,7 @@ void ini_pos(int n,float r,float x0,float y0,float vx0,float vy0, int ni){
 	float vy[n];
 	int ID[n];
 	int i=0;
-	float G=4.89*pow(10,(-21)); //kiloparsecs masas solares y a;os
+	float G=4.86*pow(10,(-24)); //kiloparsecs masas solares y a;os
 	float M=pow(10,12);
 
 	srand48(time(NULL));
