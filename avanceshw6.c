@@ -74,8 +74,8 @@ void ini_pos(int n,float r,float x0,float y0,float vx0,float vy0, int ni){
 		
 		}	
 		
-		vx[i]=-v*sin(atan2(y[i],x[i]));
-		vy[i]=v*cos(atan2(y[i],x[i]));
+		vx[i]=-(y[i]*v/r) ;
+		vy[i]= x[i]*v/r;
 		
 		fprintf(in, "%d %f %f %e %e\n",ID[i], x[i]+x0,y[i]+y0,vx[i]+vx0,vy[i]+vy0);
 		

@@ -4,7 +4,8 @@
 
 float aceleracion1(float id,float x,float y);
 void evolve(char condini[25], char condfinal[25]);
-float *rungekutta(float id,float x0, float y0,float vx0, float vy0);
+float *rungekutta(float id,float x0, float y0,float vx0, float vy0,int lmax, float x1,float y1, float vx1, float vy1, float x2,float y2 , float vx2, float vy2);
+float aceleracion2(double id,float x,float y,float vx,float vy ,float distx ,float disty);
 
 
 
@@ -18,13 +19,13 @@ int main(){
 }
 
 
-float *rungekutta(float id,float x0, float y0,float vx0, float vy0){
+float *rungekutta(float id,float x0, float y0,float vx0, float vy0,int lmax, float x1,float y1, float vx1, float vy1, float x2,float y2 , float vx2, float vy2){
   
   float *salida;
   int i;
   int dt=10000;
   int n=100000;// numero de iteraciones
-  float xn=x0;
+  float xn=x0-x1;
   float yn=y0;
   float vxn=vx0;
   float vyn=vy0;
@@ -34,6 +35,113 @@ float *rungekutta(float id,float x0, float y0,float vx0, float vy0){
     fprintf(stderr,"Problem with allocation");
     exit (1);
   }
+  
+  if(lmax>121){
+	  
+	  x=xn;
+	  y=yn;
+      vx=vxn; 
+      vy=vyn;
+      //distancia entre los centros
+      
+      float distx=x1-x2;
+      float disty=y1-y2;
+      
+    
+    //radio velocidad aceleracion;
+    a=aceleracion2(id,x,y,vx,vy,distx, disty);
+    //angulo
+    float teta = atan2(y,x); //arctan(y/x)
+    //coordenadas aceleracion
+    float ax= a*cos(teta);
+    float ay= a*sin(teta);
+    
+    //PRIMER PASO
+    
+    float k1x = vx*dt;
+    float k1y = vy*dt;
+    float l1x = ax*dt;
+    float l1y = ay*dt;
+    
+    //SEGUNDO PASO
+    
+    x = xn+ 0.5 * k1x;
+    y = yn+ 0.5 * k1y;
+    teta= atan2(y,x);
+				
+    vx= vxn + 0.5* l1x;
+    vy= vyn + 0.5 *l1y;
+    
+    a=aceleracion2(id,x,y,vx,vy,distx, disty); 
+    
+    ax=a*cos(teta);
+    ay= a*sin(teta);
+    
+    
+    float k2x= vx*dt;
+    float k2y= vy*dt;
+    float l2x= ax*dt;
+    float l2y= ay*dt;
+    
+    //TERCER PASO
+    
+    x = xn+ 0.5 * k2x;
+    y = yn+ 0.5 * k2y;
+    teta= atan2(y,x);
+    
+    vx= vxn + 0.5* l2x;
+    vy= vyn + 0.5 *l2y;
+    
+    a=aceleracion2(id,x,y,vx, vy,distx, disty);
+    
+    ax= a*cos(teta);
+    ay= a*sin(teta);
+    
+    
+    float k3x= vx*dt;
+    float k3y= vy*dt;
+    float l3x= ax*dt;
+    float l3y= ay*dt;
+    
+    //CUARTO PASO
+    
+    x = xn+ k3x;
+    y = yn+ k3y;
+    teta= atan2(y,x);
+    
+    vx= vxn + l3x;
+    vy= vyn + l3y;
+    
+    a=aceleracion2(id,x,y,vx,vy,distx, disty);
+    
+    ax= a*cos(teta);
+    ay= a*sin(teta);
+    
+    
+    float k4x= vx*dt;
+    float k4y= vy*dt;
+    float l4x= ax*dt;
+    float l4y= ay*dt;
+    
+    //FINAL
+    
+    float kx=(1.0/6.0)*(k1x + 2.0*k2x + 2.0*k3x + k4x);
+    float ky=(1.0/6.0)*(k1y + 2.0*k2y + 2.0*k3y + k4y);
+    
+    float lx=(1.0/6.0)*(l1x + 2.0*l2x + 2.0*l3x + l4x);
+    float ly=(1.0/6.0)*(l1y + 2.0*l2y + 2.0*l3y + l4y);
+
+    
+    
+    //Reasignacion
+    
+    xn=xn+kx;
+    yn=yn+ky;
+    vxn=vxn+lx;
+    vyn=vyn+ly;
+}
+  
+  
   
   for (i=0;i<n;i++){
     x=xn;
@@ -46,8 +154,8 @@ float *rungekutta(float id,float x0, float y0,float vx0, float vy0){
     //angulo
     float teta = atan2(y,x); //arctan(y/x)
     //coordenadas aceleracion
-    float ax= -a*cos(teta);
-    float ay= -a*sin(teta);
+    float ax= a*cos(teta);
+    float ay= a*sin(teta);
     
     //PRIMER PASO
     
@@ -153,7 +261,7 @@ float aceleracion1(float id,float x,float y){
   //Si es una particula cualquiera
   if ( id>=0 ){
     r=sqrt(pow(x,2)+pow(y,2));
-    a=(G*M/pow(r,2));
+    a=-(G*M/pow(r,2));
   }
   //Si es el centro  
   else if( id<0 ){
@@ -164,7 +272,7 @@ float aceleracion1(float id,float x,float y){
 
 }
 
-/*float aceleracion2(double id,float x,float y,float vx,float vy ,float distx ,float disty){
+float aceleracion2(double id,float x,float y,float vx,float vy ,float distx ,float disty){
   float G=4.86*pow(10,(-24));
   float M=pow(10,12);
   float r=sqrt(pow(x,2)+pow(y,2));
@@ -185,10 +293,10 @@ float aceleracion1(float id,float x,float y){
 		
     a=-G*M*(1/pow(distc,2));
   }
-  
+  return a;
 
 }
-*/
+
 void evolve (char condini[25], char condfin[25]){
   FILE *ini;
   FILE *fin;
@@ -245,11 +353,20 @@ void evolve (char condini[25], char condfin[25]){
   }  
   
   for (l=0;l<lmax;l++){
-    n = 5*l;
-    var = rungekutta(M[n],M[n+1],M[n+2],M[n+3],M[n+4]);
+	n = 5*l;  
+	  
+	  if(lmax<120){
+		  var = rungekutta(M[n],M[n+1],M[n+2],M[n+3],M[n+4],lmax, M[1] ,M[2],M[3],M[4],0.0,0.0 ,0.0,0.0);
+		 
+	  }
+    else {
+		var = rungekutta(M[n],M[n+1],M[n+2],M[n+3],M[n+4],lmax, M[1] ,M[2],M[3],M[4],M[121*5],M[(121*5)+1] ,M[(121*5)+2],M[(121*5)+3]);
+	}
+    
     fprintf(fin, "%d %f %f %e %e\n",(int)M[n], var[0], var[1],var[2], var[3]);
   }
   fclose(fin);
 }
+
 
 
