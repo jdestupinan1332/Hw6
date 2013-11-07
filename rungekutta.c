@@ -65,7 +65,7 @@ float *rungekutta(float id,float x0, float y0,float vx0, float vy0){
     vx= vxn + 0.5* l1x;
     vy= vyn + 0.5 *l1y;
     
-    a=aceleracion1(id,x,y);
+    a=aceleracion1(id,x,y); 
     
     ax=a*cos(teta);
     ay= a*sin(teta);
@@ -247,7 +247,7 @@ void evolve (char condini[25], char condfin[25]){
   for (l=0;l<lmax;l++){
     n = 5*l;
     var = rungekutta(M[n],M[n+1],M[n+2],M[n+3],M[n+4]);
-    fprintf(fin, "%d %f %f %e %e\n",l-1, var[0], var[1],var[2], var[3]);
+    fprintf(fin, "%d %f %f %e %e\n",(int)M[n], var[0], var[1],var[2], var[3]);
   }
   fclose(fin);
 }
