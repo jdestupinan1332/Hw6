@@ -9,7 +9,7 @@ float * rungekutta(float x0, float y0,float vx0, float vy0);
 
 
 int main(){
-  evolve("data.dat","data2.dat");
+  evolve("data1.dat","data2.dat");
   evolve("data2.dat","data3.dat");
   evolve("data3.dat","data4.dat");
   evolve("data4.dat","data5.dat");
@@ -30,7 +30,7 @@ float * rungekutta(float x0, float y0,float vx0, float vy0){
   
 	
 	int i;
-	int dt=100;
+	int dt=10;
 	int n=100000;// numero de iteraciones
 	float xn=x0;
 	float yn=y0;
